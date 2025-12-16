@@ -7,5 +7,10 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
-    show-sql: true
+      ddl-auto: update
+    show-sql: true              # 콘솔에 쿼리 출력
+    properties:
+      hibernate:
+        format_sql: true        # 쿼리 줄바꿈
+        highlight_sql: true     # 쿼리에 색상을 입혀서 가독성 높임
+        use_sql_comments: true  # 쿼리 옆에 어떤 JPQL인지 주석 달아줌
