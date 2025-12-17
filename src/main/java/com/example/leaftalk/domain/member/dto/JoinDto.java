@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class JoinDTO {
+public class JoinDto {
 
     private String email;
 
@@ -16,10 +16,10 @@ public class JoinDTO {
 
     public Member toEntity(String encodedPassword) {
         return Member.builder()
-                     .email(this.email)
-                     .password(encodedPassword)
-                     .nickname(this.nickname)
-                     .role("ROLE_USER")
-                     .build();
+                .email(this.email)
+                .password(encodedPassword)
+                .nickname(this.nickname)
+                .role("ROLE_USER")
+                .build();
     }
 }

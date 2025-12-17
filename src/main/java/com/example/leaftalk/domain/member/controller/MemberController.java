@@ -1,6 +1,6 @@
 package com.example.leaftalk.domain.member.controller;
 
-import com.example.leaftalk.domain.member.dto.JoinDTO;
+import com.example.leaftalk.domain.member.dto.JoinDto;
 import com.example.leaftalk.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +16,7 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signUp(@RequestBody JoinDTO joinDTO) {
+    public ResponseEntity<String> signUp(@RequestBody JoinDto joinDTO) {
 
         memberService.createMember(joinDTO);
 
