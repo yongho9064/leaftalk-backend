@@ -1,4 +1,4 @@
-package com.example.leaftalk.global.error;
+package com.example.leaftalk.global.exception;
 
 import com.example.leaftalk.domain.member.exception.DuplicateEmailException;
 import lombok.extern.slf4j.Slf4j;

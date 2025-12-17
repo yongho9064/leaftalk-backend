@@ -14,3 +14,7 @@ spring:
         format_sql: true        # 쿼리 줄바꿈
         highlight_sql: true     # 쿼리에 색상을 입혀서 가독성 높임
         use_sql_comments: true  # 쿼리 옆에 어떤 JPQL인지 주석 달아줌
+
+  jwt:
+    secret: ${JWT_SECRET_KET}   # JWT 시크릿 키
+    expiration: 3600000         # 1시간 (밀리초 단위)

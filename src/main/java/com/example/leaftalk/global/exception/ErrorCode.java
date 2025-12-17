@@ -1,4 +1,4 @@
-package com.example.leaftalk.global.error;
+package com.example.leaftalk.global.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

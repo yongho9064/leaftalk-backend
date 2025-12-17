@@ -1,6 +1,6 @@
 package com.example.leaftalk.domain.member.service;
 
-import com.example.leaftalk.domain.member.dto.JoinDTO;
+import com.example.leaftalk.domain.member.dto.JoinDto;
 import com.example.leaftalk.domain.member.entity.Member;
 import com.example.leaftalk.domain.member.exception.DuplicateEmailException;
 import com.example.leaftalk.domain.member.repository.MemberRepository;
@@ -16,14 +16,13 @@ public class MemberService {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public void createMember(JoinDTO joinDTO) {
+    public void createMember(JoinDto joinDto) {
 
-        if (memberRepository.existsByEmail(joinDTO.getEmail())) {
-            throw new DuplicateEmailException("이미 존재하는 이메일입니다. ", joinDTO.getEmail());
+        if (memberRepository.existsByEmail(joinDto.getEmail())) {
+            throw new DuplicateEmailException("이미 존재하는 이메일입니다. ", joinDto.getEmail());
         }
 
-        String encodedPassword = bCryptPasswordEncoder.encode(joinDTO.getPassword());
-        Member member = joinDTO.toEntity(encodedPassword);
+        Member member = joinDto.toEntity(bCryptPasswordEncoder.encode(joinDto.getPassword()));
 
         memberRepository.save(member);
     }
