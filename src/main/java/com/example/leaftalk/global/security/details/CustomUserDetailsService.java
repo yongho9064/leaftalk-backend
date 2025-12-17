@@ -1,4 +1,4 @@
-package com.example.leaftalk.global.security;
+package com.example.leaftalk.global.security.details;
 
 import com.example.leaftalk.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +17,12 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
         return memberRepository.findMemberByEmail(email)
-                               .map(member -> new CustomUserDetails(member.getRole(), member.getEmail(), member.getPassword()))
-                               .orElseThrow(() -> new UsernameNotFoundException("해당 이메일로 가입된 사용자가 없습니다. email: " + email));
+                .map(member -> CustomUserDetails.builder()
+                        .email(member.getEmail())
+                        .password(member.getPassword())
+                        .role(member.getRole())
+                        .build())
+                .orElseThrow(() -> new UsernameNotFoundException("해당 이메일로 가입된 사용자가 없습니다. email: " + email));
     }
 
 }
