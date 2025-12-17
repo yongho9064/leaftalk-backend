@@ -56,7 +56,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                 .map(GrantedAuthority::getAuthority)
                 .orElse("ROLE_USER");
 
-        String token = jwtUtil.createJwt(email, role, 60 * 60 * 10L);
+        String token = jwtUtil.createJwt(email, role);
 
         response.addHeader("Authorization", "Bearer " + token);
     }
