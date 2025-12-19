@@ -2,7 +2,7 @@ package com.example.leaftalk.global.security.handler;
 
 import com.example.leaftalk.domain.auth.service.AuthService;
 import com.example.leaftalk.global.security.jwt.JWTUtil;
-import jakarta.servlet.ServletException;
+import com.example.leaftalk.global.security.jwt.TokenType;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
@@ -24,15 +24,15 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     private final AuthService authService;
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
 
         // 로그인 성공시 이메일과 역할 추출
         String email = authentication.getName();
         String role = authentication.getAuthorities().iterator().next().getAuthority();
 
         // JWT 생성
-        String accessToken = jwtUtil.createJWT(email, role, true);
-        String refreshToken = jwtUtil.createJWT(email, role, false);
+        String accessToken = jwtUtil.createJWT(email, role, TokenType.Access);
+        String refreshToken = jwtUtil.createJWT(email, role, TokenType.Refresh);
 
         authService.addRefresh(email, refreshToken);
 

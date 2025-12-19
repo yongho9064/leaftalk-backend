@@ -38,16 +38,19 @@ public class JWTUtil {
         return Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload().get("role", String.class);
     }
 
-    public String createJWT(String email, String role, boolean isAccess) {
+    public String createJWT(String email, String role, TokenType tokenType) {
 
         long now = System.currentTimeMillis();
-        long expireTime = isAccess ?  accessTokenExpireTime : refreshTokenExpireTime;
-        String type = isAccess ? "access" : "refresh";
+
+        long expireTime = switch (tokenType) {
+            case Access -> accessTokenExpireTime;
+            case Refresh -> refreshTokenExpireTime;
+        };
 
         return Jwts.builder()
                 .claim("sub", email)
                 .claim("role", role)
-                .claim("type", type)
+                .claim("type", tokenType.name())
                 .issuedAt(new Date(now))
                 .expiration(new Date(now + expireTime))
                 .signWith(key)
@@ -55,7 +58,7 @@ public class JWTUtil {
     }
 
     // JWT 유효 여부 (위조, 시간, Acc/Ref 여부)
-    public boolean isValid(String token, boolean isAccess) {
+    public boolean isValid(String token, TokenType tokenType) {
         try {
             Claims claims = Jwts.parser()
                     .verifyWith(key)
@@ -65,7 +68,7 @@ public class JWTUtil {
 
             String type = claims.get("type", String.class);
 
-            return isAccess ? "access".equals(type) : "refresh".equals(type);
+            return tokenType.name().equals(type);
 
         } catch (JwtException | IllegalArgumentException _) {
             return false;
