@@ -52,20 +52,15 @@ public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
         }
 
         // 데이터베이스 조회 -> 존재하면 업데이트, 없으면 신규 가입
-        Member member = memberRepository.findByEmailAndIsSocial(email, true).orElseThrow(
-                () -> new OAuth2AuthenticationException("소셜 회원 정보 조회 중 오류가 발생했습니다."));
+        Member member = memberRepository.findByEmailAndIsSocial(email, true).orElse(null);
 
         if (member != null) {
-            // 기존 유저 업데이트 -> 닉네임 변경 되었거나 프로필 사진이 변경 되었을 경우 다시 저장
-            /*MemberRequestDto.Update dto = MemberRequestDto.Update
-                    .builder()
-                    .email(email)
-                    .nickname(nickname)
-                    .build();*/
 
             member.updateMember(nickname);
-
             memberRepository.save(member);
+
+            return new MemberDetails(member, attributes);
+
         } else {
             Member newMember = Member.builder()
                     .email(email)
@@ -79,9 +74,8 @@ public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
                     .build();
 
             memberRepository.save(newMember);
+
+            return new MemberDetails(newMember, attributes);
         }
-
-        return new MemberDetails(member, attributes);
-
     }
 }

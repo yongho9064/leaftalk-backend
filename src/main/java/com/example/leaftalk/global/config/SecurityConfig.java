@@ -71,7 +71,7 @@ public class SecurityConfig {
         // 예외 처리
         http.exceptionHandling(e -> e
                 .authenticationEntryPoint((request, response, authException) -> response
-                        .sendError(HttpServletResponse.SC_UNAUTHORIZED))
+                        .sendError(HttpServletResponse.SC_NOT_FOUND))
                 .accessDeniedHandler(((request, response, accessDeniedException) -> response
                         .sendError(HttpServletResponse.SC_FORBIDDEN))));
 
@@ -109,7 +109,7 @@ public class SecurityConfig {
         configuration.setAllowedHeaders(List.of("*"));                                 // 요청 헤더 허용 -> 클라이언트가 보내는
         configuration.setAllowCredentials(true);                                       //  인증 정보 허용
         configuration.setExposedHeaders(List.of("Authorization", "Set-Cookie"));       //  응답 헤더 노출 -> 클라이언트가 받을수 있는
-        configuration.setMaxAge(3600L);                                                //  캐싱 시간 설정 (같은 요청 시 재요청 방지)
+        configuration.setMaxAge(3600L);
 
         // CORS 설정을 모든 경로에 적용 (/login, /signup... 등)
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

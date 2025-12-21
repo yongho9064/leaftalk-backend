@@ -4,7 +4,6 @@ import com.example.leaftalk.domain.auth.service.AuthService;
 import com.example.leaftalk.global.security.enums.TokenType;
 import com.example.leaftalk.global.security.util.CookieUtil;
 import com.example.leaftalk.global.security.util.JWTUtil;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,8 +24,7 @@ public class SocialSuccessHandler implements AuthenticationSuccessHandler {
     private final AuthService authService;
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         String username =  authentication.getName();
         String role = authentication.getAuthorities().iterator().next().getAuthority();
 
@@ -34,9 +32,9 @@ public class SocialSuccessHandler implements AuthenticationSuccessHandler {
 
         authService.addRefresh(username, refreshToken);
 
-        Cookie refreshCookie = CookieUtil.createCookie("refreshToken", refreshToken, 10);
+        Cookie refreshCookie = CookieUtil.createCookie("refreshToken", refreshToken, 7 * 24 * 60 * 60);
 
         response.addCookie(refreshCookie);
-        response.sendRedirect("http://localhost:5173/cookie");
+        response.sendRedirect("http://localhost:5173/oauth/callback");
     }
 }
