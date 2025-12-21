@@ -11,13 +11,15 @@ public class ErrorResponse {
     private final int status;
     private final String code;
     private final String message;
+    private final String error;
 
     public static ResponseEntity<ErrorResponse> toResponseEntity(ErrorCode errorCode) {
         return ResponseEntity
                 .status(errorCode.getHttpStatus())
                 .body(ErrorResponse.builder()
                         .status(errorCode.getHttpStatus().value())
-                        .code(errorCode.getType())
+                        .error(errorCode.getHttpStatus().name())
+                        .code(errorCode.name())
                         .message(errorCode.getMessage())
                         .build()
                 );
