@@ -1,6 +1,5 @@
 package com.example.leaftalk.domain.member.entity;
 
-import com.example.leaftalk.domain.member.dto.request.MemberRequestDto;
 import com.example.leaftalk.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -32,6 +31,7 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false)
     private boolean isSocial;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
 
@@ -39,18 +39,18 @@ public class Member extends BaseTimeEntity {
     private SocialProvider socialProvider;
 
     @Builder
-    public Member(String email, String password, String nickname,  Role role, boolean isLock, boolean isSocial) {
+    public Member(String email, String password, String nickname,  Role role, boolean isLock, boolean isSocial, SocialProvider socialProvider) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
         this.role = role;
         this.isLock = isLock;
         this.isSocial = isSocial;
+        this.socialProvider = socialProvider;
     }
 
-    public void updateMember(MemberRequestDto.Update request) {
-        this.nickname = request.getNickname();
-        this.password = request.getPassword();
+    public void updateMember(String nickname) {
+        this.nickname = nickname;
     }
 
 }

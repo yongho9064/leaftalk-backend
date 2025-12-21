@@ -1,5 +1,6 @@
-package com.example.leaftalk.global.security.jwt;
+package com.example.leaftalk.global.security.util;
 
+import com.example.leaftalk.global.security.enums.TokenType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -25,7 +26,6 @@ public class JWTUtil {
 
         byte[] keyBytes = key.getBytes(StandardCharsets.UTF_8);
         this.key = new SecretKeySpec(keyBytes, Jwts.SIG.HS256.key().build().getAlgorithm());
-
         this.accessTokenExpireTime = accessTokenExpireTime;
         this.refreshTokenExpireTime = refreshTokenExpireTime;
     }
@@ -43,8 +43,8 @@ public class JWTUtil {
         long now = System.currentTimeMillis();
 
         long expireTime = switch (tokenType) {
-            case Access -> accessTokenExpireTime;
-            case Refresh -> refreshTokenExpireTime;
+            case ACCESS -> this.accessTokenExpireTime;
+            case REFRESH -> this.refreshTokenExpireTime;
         };
 
         return Jwts.builder()
