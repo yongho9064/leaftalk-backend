@@ -1,4 +1,4 @@
 package com.example.leaftalk.domain.auth.dto.response;
 
-public record JWTResponse(String accessToken, String refreshToken) {
+public record JWTResponse(String accessToken) {
 }
