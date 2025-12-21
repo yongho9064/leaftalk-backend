@@ -71,7 +71,7 @@ public class SecurityConfig {
         // 예외 처리
         http.exceptionHandling(e -> e
                 .authenticationEntryPoint((request, response, authException) -> response
-                        .sendError(HttpServletResponse.SC_NOT_FOUND))
+                        .sendError(HttpServletResponse.SC_UNAUTHORIZED))
                 .accessDeniedHandler(((request, response, accessDeniedException) -> response
                         .sendError(HttpServletResponse.SC_FORBIDDEN))));
 

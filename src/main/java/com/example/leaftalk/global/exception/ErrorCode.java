@@ -18,9 +18,9 @@ public enum ErrorCode {
 
     // == 권한(Authentication) 에러 ==
     AUTHENTICATION_FAILED(HttpStatus.UNAUTHORIZED, Constants.AUTHENTICATION, "인증에 실패하였습니다."),
-    AUTHENTICATION_REJECT(HttpStatus.UNAUTHORIZED, Constants.AUTHENTICATION, "인증이 거부되었습니다."),
-    COOKIE_NOT_FOUND(HttpStatus.BAD_REQUEST, Constants.AUTHENTICATION, "쿠키가 존재하지 않습니다."),
-    REFRESH_TOKEN_NOT_FOUND(HttpStatus.BAD_REQUEST, Constants.AUTHENTICATION, "Refresh Token이 존재하지 않습니다."),
+    ACCESS_DENIED(HttpStatus.FORBIDDEN, Constants.AUTHENTICATION, "인증이 거부되었습니다."),
+    COOKIE_NOT_FOUND(HttpStatus.UNAUTHORIZED, Constants.AUTHENTICATION, "쿠키가 존재하지 않습니다."),
+    REFRESH_TOKEN_NOT_FOUND(HttpStatus.UNAUTHORIZED, Constants.AUTHENTICATION, "Refresh Token이 존재하지 않습니다."),
     INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, Constants.AUTHENTICATION, "유효하지 않은 Refresh Token입니다."),
     EXPIRED_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, Constants.AUTHENTICATION, "만료된 Refresh Token입니다.");
 
