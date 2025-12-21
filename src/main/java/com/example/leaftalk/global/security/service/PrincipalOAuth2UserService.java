@@ -68,15 +68,15 @@ public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
             memberRepository.save(member);
         } else {
             Member newMember = Member.builder()
-                                     .email(email)
-                                     .password("")
-                                     .isLock(false)
-                                     .isSocial(true)
-                                     .socialProvider(SocialProvider.valueOf(registrationId))
-                                     .role(Role.USER)
-                                     .nickname(nickname)
-                                     .email(email)
-                                     .build();
+                    .email(email)
+                    .password("")
+                    .isLock(false)
+                    .isSocial(true)
+                    .socialProvider(SocialProvider.valueOf(registrationId))
+                    .role(Role.USER)
+                    .nickname(nickname)
+                    .email(email)
+                    .build();
 
             memberRepository.save(newMember);
         }

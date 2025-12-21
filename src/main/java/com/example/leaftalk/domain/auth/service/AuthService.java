@@ -7,6 +7,7 @@ import com.example.leaftalk.domain.auth.repository.RefreshRepository;
 import com.example.leaftalk.global.exception.CustomException;
 import com.example.leaftalk.global.exception.ErrorCode;
 import com.example.leaftalk.global.security.enums.TokenType;
+import com.example.leaftalk.global.security.util.CookieUtil;
 import com.example.leaftalk.global.security.util.JWTUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,32 +27,21 @@ public class AuthService {
     @Transactional
     public JWTResponse cookie2Header(HttpServletRequest request, HttpServletResponse response) {
 
-        // 쿠키 리스트
-        Cookie[] cookies = request.getCookies();
-        if (cookies == null) {
-            throw new CustomException(ErrorCode.COOKIE_NOT_FOUND);
-        }
+        // 쿠키에서 Refresh 토큰 추출
+        Cookie cookie = CookieUtil.getCookie(request,"refreshToken")
+                .orElseThrow(() -> new CustomException(ErrorCode.COOKIE_NOT_FOUND));
 
-        // Refresh 토큰 획득
-        String refreshToken = null;
-        for (Cookie cookie : cookies) {
-            if ("refreshToken".equals(cookie.getName())) {
-                refreshToken = cookie.getValue();
-                break;
-            }
-        }
+        String refreshToken = cookie.getValue();
 
         if (refreshToken == null) {
             throw new CustomException(ErrorCode.REFRESH_TOKEN_NOT_FOUND);
         }
 
         // Refresh 토큰 검증
-        boolean isValid = jwtUtil.isValid(refreshToken, TokenType.REFRESH);
-        if (!isValid) {
+        if (!jwtUtil.isValid(refreshToken, TokenType.REFRESH)) {
             throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
 
-        // 정보 추출
         String email = jwtUtil.getEmail(refreshToken);
         String role = jwtUtil.getRole(refreshToken);
 
@@ -70,7 +60,7 @@ public class AuthService {
         refreshRepository.save(newRefreshEntity);
 
         // 기존 쿠키 제거
-        expireCookie(response);
+        CookieUtil.deleteCookie(response,"refreshToken");
 
         return new JWTResponse(newAccessToken, newRefreshToken);
     }
@@ -82,8 +72,7 @@ public class AuthService {
         String refreshToken = request.getRefreshToken();
 
         // Refresh 토큰 검증
-        boolean isValid = jwtUtil.isValid(refreshToken, TokenType.REFRESH);
-        if (!isValid) {
+        if (!jwtUtil.isValid(refreshToken, TokenType.REFRESH)) {
             throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
 
@@ -92,7 +81,6 @@ public class AuthService {
             throw new CustomException(ErrorCode.REFRESH_TOKEN_NOT_FOUND);
         }
 
-        // 정보 추출
         String email = jwtUtil.getEmail(refreshToken);
         String role = jwtUtil.getRole(refreshToken);
 
@@ -135,15 +123,6 @@ public class AuthService {
     @Transactional
     public void removeRefreshEmail(String email) {
         refreshRepository.deleteByEmail(email);
-    }
-
-    private void expireCookie(HttpServletResponse response) {
-        Cookie refreshCookie = new Cookie("refreshToken", null);
-        refreshCookie.setHttpOnly(true);
-        refreshCookie.setSecure(false);
-        refreshCookie.setPath("/");
-        refreshCookie.setMaxAge(10);
-        response.addCookie(refreshCookie);
     }
 
 }

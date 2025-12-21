@@ -2,6 +2,7 @@ package com.example.leaftalk.global.security.handler;
 
 import com.example.leaftalk.domain.auth.service.AuthService;
 import com.example.leaftalk.global.security.enums.TokenType;
+import com.example.leaftalk.global.security.util.CookieUtil;
 import com.example.leaftalk.global.security.util.JWTUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -33,12 +34,7 @@ public class SocialSuccessHandler implements AuthenticationSuccessHandler {
 
         authService.addRefresh(username, refreshToken);
 
-        // 응답
-        Cookie refreshCookie = new Cookie("refreshToken", refreshToken);
-        refreshCookie.setHttpOnly(true);
-        refreshCookie.setSecure(false);
-        refreshCookie.setPath("/");
-        refreshCookie.setMaxAge(10);
+        Cookie refreshCookie = CookieUtil.createCookie("refreshToken", refreshToken, 10);
 
         response.addCookie(refreshCookie);
         response.sendRedirect("http://localhost:5173/cookie");
