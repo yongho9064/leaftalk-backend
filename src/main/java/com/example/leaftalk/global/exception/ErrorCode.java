@@ -11,6 +11,7 @@ public enum ErrorCode {
     // == 회원(Member) 에러 ==
     DUPLICATE_EMAIL(HttpStatus.CONFLICT, Constants.MEMBER, "이미 존재하는 이메일입니다."),
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, Constants.MEMBER, "회원을 찾을 수 없습니다."),
+    PASSWORD_MISMATCH(HttpStatus.BAD_REQUEST, Constants.MEMBER, "비밀번호가 일치하지 않습니다."),
 
     // == 공통(Global) 에러 ==
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, Constants.GLOBAL, "서버 내부 에러입니다."),

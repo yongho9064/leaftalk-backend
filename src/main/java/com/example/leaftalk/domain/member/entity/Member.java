@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseTimeEntity {
 
-    @Id
+    @Id @Column(name = "member_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -24,6 +24,9 @@ public class Member extends BaseTimeEntity {
 
     @Column(nullable = false)
     private String nickname;
+
+    @Column(nullable = false)
+    private boolean marketingAgree;
 
     @Column(nullable = false)
     private boolean isLock;
@@ -39,10 +42,11 @@ public class Member extends BaseTimeEntity {
     private SocialProvider socialProvider;
 
     @Builder
-    public Member(String email, String password, String nickname,  Role role, boolean isLock, boolean isSocial, SocialProvider socialProvider) {
+    public Member(String email, String password, String nickname,  Role role, boolean marketingAgree, boolean isLock, boolean isSocial, SocialProvider socialProvider) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
+        this.marketingAgree = marketingAgree;
         this.role = role;
         this.isLock = isLock;
         this.isSocial = isSocial;

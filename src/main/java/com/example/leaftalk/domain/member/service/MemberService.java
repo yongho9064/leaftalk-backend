@@ -26,9 +26,9 @@ public class MemberService {
     @Transactional
     public Long registerMember(MemberSignupRequest request) {
 
-        if (memberRepository.existsByEmail(request.getEmail())) {
-            throw new CustomException(ErrorCode.DUPLICATE_EMAIL);
-        }
+        if (!request.isPasswordCheck()) throw new CustomException(ErrorCode.PASSWORD_MISMATCH);
+
+        if (memberRepository.existsByEmail(request.getEmail())) throw new CustomException(ErrorCode.DUPLICATE_EMAIL);
 
         Member member = request.toEntity(bCryptPasswordEncoder.encode(request.getPassword()));
         Member saveMember = memberRepository.save(member);
@@ -39,7 +39,7 @@ public class MemberService {
     @Transactional(readOnly = true)
     public MemberResponse getMember(String email) {
         Member member = memberRepository.findByEmailAndIsLock(email, false)
-                                        .orElseThrow(() -> new UsernameNotFoundException("해당 사용자를 찾을 수 없습니다. " + email));
+                .orElseThrow(() -> new UsernameNotFoundException("해당 사용자를 찾을 수 없습니다. " + email));
         return new MemberResponse(email, member.isSocial(), member.getNickname(), member.getEmail());
     }
 

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Refresh extends BaseCreateTimeEntity {
 
-    @Id
+    @Id @Column(name = "refresh_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
