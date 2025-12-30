@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 @RequiredArgsConstructor
-public class RefreshTokenLogoutHandler implements LogoutHandler {
+public class CustomLogoutHandler implements LogoutHandler {
 
     private final AuthService authService;
     private final JWTUtil jwtUtil;
@@ -50,9 +50,9 @@ public class RefreshTokenLogoutHandler implements LogoutHandler {
                 return;
             }
 
-            long row = authService.removeRefreshToken(refreshToken);
+            boolean isDeleted = authService.removeRefreshToken(refreshToken);
 
-            if (row > 0) {
+            if (isDeleted) {
                 response.setStatus(HttpServletResponse.SC_OK);
             } else {
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to delete Refresh Token");

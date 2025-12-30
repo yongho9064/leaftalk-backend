@@ -4,7 +4,7 @@ import com.example.leaftalk.domain.auth.service.AuthService;
 import com.example.leaftalk.domain.member.entity.Role;
 import com.example.leaftalk.global.security.filter.JWTFilter;
 import com.example.leaftalk.global.security.filter.LoginFilter;
-import com.example.leaftalk.global.security.handler.RefreshTokenLogoutHandler;
+import com.example.leaftalk.global.security.handler.CustomLogoutHandler;
 import com.example.leaftalk.global.security.util.JWTUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -76,7 +76,7 @@ public class SecurityConfig {
                         .sendError(HttpServletResponse.SC_FORBIDDEN))));
 
         http.logout(logout -> logout
-                .addLogoutHandler(new RefreshTokenLogoutHandler(authService, jwtUtil))
+                .addLogoutHandler(new CustomLogoutHandler(authService, jwtUtil))
                 .logoutSuccessHandler(((request, response, authentication) ->
                         response.setStatus(HttpServletResponse.SC_OK)
                 )));
