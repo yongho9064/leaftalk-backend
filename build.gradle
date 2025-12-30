@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '4.0.0'
+    id 'org.springframework.boot' version '4.0.1'
     id 'io.spring.dependency-management' version '1.1.7'
 }
 
@@ -52,12 +52,6 @@ dependencies {
      * Database
      * ========================= */
     runtimeOnly 'com.mysql:mysql-connector-j'
-
-
-    /* =========================
-     * Apache Commons
-     * ========================= */
-    implementation 'org.apache.commons:commons-lang3:3.20.0'
 
 
     /* =========================

@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 @RequiredArgsConstructor
-public class RefreshTokenLogoutHandler implements LogoutHandler {
+public class CustomLogoutHandler implements LogoutHandler {
 
     private final AuthService authService;
     private final JWTUtil jwtUtil;
