@@ -50,14 +50,12 @@ public class MemberService {
                 .orElseThrow(() -> new UsernameNotFoundException(email));
 
         member.updateMember(request.getNickname());
-
-        memberRepository.save(member);  // 더티 체크로 인한 저장이 되지만 혼란을 막기 위해 명시적으로 저장
     }
 
     @Transactional
     public void deleteMember(String email) {
         memberRepository.deleteByEmail(email);
-        authService.removeRefreshEmail(email);
+        authService.removeRefreshTokenByEmail(email);
     }
 
     @Transactional(readOnly = true)      // 따로 분리 할까 생각중

@@ -16,13 +16,9 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping("/exchange")
-    public JWTResponse jwtExchange(HttpServletRequest request, HttpServletResponse response) {
-        return authService.rotateToken(request, response);
-    }
-
     @PostMapping("/refresh")
     public JWTResponse jwtRefresh(HttpServletRequest request, HttpServletResponse response) {
-        return authService.rotateToken(request, response);
+        return authService.reissueToken(request, response);
     }
+
 }
