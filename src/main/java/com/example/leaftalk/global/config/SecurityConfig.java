@@ -1,6 +1,6 @@
 package com.example.leaftalk.global.config;
 
-import com.example.leaftalk.domain.auth.service.AuthService;
+import com.example.leaftalk.domain.auth.repository.RefreshTokenRepository;
 import com.example.leaftalk.domain.member.entity.Role;
 import com.example.leaftalk.global.security.filter.JWTFilter;
 import com.example.leaftalk.global.security.filter.LoginFilter;
@@ -48,7 +48,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, AuthService authService, JWTUtil jwtUtil) {
+    public SecurityFilterChain filterChain(HttpSecurity http, RefreshTokenRepository refreshTokenRepository, JWTUtil jwtUtil) {
 
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/jwt/exchange", "/jwt/refresh", "/members/exist", "/members").permitAll()
@@ -76,7 +76,7 @@ public class SecurityConfig {
                         .sendError(HttpServletResponse.SC_FORBIDDEN))));
 
         http.logout(logout -> logout
-                .addLogoutHandler(new CustomLogoutHandler(authService, jwtUtil))
+                .addLogoutHandler(new CustomLogoutHandler(refreshTokenRepository, jwtUtil))
                 .logoutSuccessHandler(((request, response, authentication) ->
                         response.setStatus(HttpServletResponse.SC_OK)
                 )));

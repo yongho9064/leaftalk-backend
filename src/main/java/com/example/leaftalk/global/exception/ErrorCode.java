@@ -23,7 +23,8 @@ public enum ErrorCode {
     COOKIE_NOT_FOUND(HttpStatus.UNAUTHORIZED, Constants.AUTHENTICATION, "쿠키가 존재하지 않습니다."),
     REFRESH_TOKEN_NOT_FOUND(HttpStatus.UNAUTHORIZED, Constants.AUTHENTICATION, "Refresh Token이 존재하지 않습니다."),
     INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, Constants.AUTHENTICATION, "유효하지 않은 Refresh Token입니다."),
-    EXPIRED_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, Constants.AUTHENTICATION, "만료된 Refresh Token입니다.");
+    EXPIRED_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, Constants.AUTHENTICATION, "만료된 Refresh Token입니다."),
+    SECURITY_RISK_DETECTED(HttpStatus.UNAUTHORIZED, Constants.AUTHENTICATION, "보안 위험이 감지되었습니다.");
 
     private final HttpStatus httpStatus;
     private final String type;
