@@ -19,3 +19,6 @@ spring:
     secret: ${JWT_SECRET_KET}   # JWT 시크릿 키
     access-expiration: 6000000   # 1시간
     refresh-expiration: 604800000 # 7일
+
+  cookie:
+    refresh-max-age-sec: 604800

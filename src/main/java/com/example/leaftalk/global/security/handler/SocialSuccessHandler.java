@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,9 @@ import java.io.IOException;
 @Qualifier("socialSuccessHandler")
 public class SocialSuccessHandler implements AuthenticationSuccessHandler {
 
+    @Value("${spring.cookie.refresh-max-age-sec}")
+    private int cookieRefreshMaxAgeSec;
+
     private final JWTUtil jwtUtil;
     private final AuthService authService;
 
@@ -30,9 +34,9 @@ public class SocialSuccessHandler implements AuthenticationSuccessHandler {
 
         String refreshToken = jwtUtil.createJWT(username, role, TokenType.REFRESH);
 
-        authService.addRefresh(username, refreshToken);
+        authService.addRefresh(request, username, refreshToken);
 
-        Cookie refreshCookie = CookieUtil.createCookie("refreshToken", refreshToken, 7 * 24 * 60 * 60);
+        Cookie refreshCookie = CookieUtil.createCookie("refreshToken", refreshToken, cookieRefreshMaxAgeSec);
 
         response.addCookie(refreshCookie);
         response.sendRedirect("http://localhost:5173/oauth/callback");
