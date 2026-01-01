@@ -1,6 +1,6 @@
 package com.example.leaftalk.global.security.handler;
 
-import com.example.leaftalk.domain.auth.service.AuthService;
+import com.example.leaftalk.domain.auth.repository.RefreshTokenRepository;
 import com.example.leaftalk.global.security.enums.TokenType;
 import com.example.leaftalk.global.security.util.JWTUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,7 +21,8 @@ import java.io.InputStreamReader;
 @RequiredArgsConstructor
 public class CustomLogoutHandler implements LogoutHandler {
 
-    private final AuthService authService;
+    private final RefreshTokenRepository refreshTokenRepository;
+
     private final JWTUtil jwtUtil;
 
     @Override
@@ -50,7 +51,8 @@ public class CustomLogoutHandler implements LogoutHandler {
                 return;
             }
 
-            boolean isDeleted = authService.removeRefreshToken(refreshToken);
+            String email = jwtUtil.getEmail(refreshToken);
+            boolean isDeleted = refreshTokenRepository.deleteRefreshTokenByEmail(email);
 
             if (isDeleted) {
                 response.setStatus(HttpServletResponse.SC_OK);

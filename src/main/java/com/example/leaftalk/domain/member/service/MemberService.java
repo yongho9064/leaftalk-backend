@@ -1,6 +1,6 @@
 package com.example.leaftalk.domain.member.service;
 
-import com.example.leaftalk.domain.auth.service.AuthService;
+import com.example.leaftalk.domain.auth.repository.RefreshTokenRepository;
 import com.example.leaftalk.domain.member.dto.request.MemberSignupRequest;
 import com.example.leaftalk.domain.member.dto.request.MemberUpdateRequest;
 import com.example.leaftalk.domain.member.dto.response.MemberResponse;
@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final AuthService authService;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -55,7 +55,7 @@ public class MemberService {
     @Transactional
     public void deleteMember(String email) {
         memberRepository.deleteByEmail(email);
-        authService.removeRefreshTokenByEmail(email);
+        refreshTokenRepository.deleteRefreshTokenByEmail(email);
     }
 
     @Transactional(readOnly = true)      // 따로 분리 할까 생각중

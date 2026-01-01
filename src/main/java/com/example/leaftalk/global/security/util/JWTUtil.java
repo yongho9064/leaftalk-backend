@@ -4,6 +4,7 @@ import com.example.leaftalk.global.security.enums.TokenType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +13,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
+@Slf4j
 @Component
 public class JWTUtil {
 
@@ -70,7 +72,8 @@ public class JWTUtil {
 
             return tokenType.name().equals(type);
 
-        } catch (JwtException | IllegalArgumentException _) {
+        } catch (JwtException | IllegalArgumentException e) {
+            log.error("유효하지 않은 토큰: {}", e.getMessage());
             return false;
         }
 
