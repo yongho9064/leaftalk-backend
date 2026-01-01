@@ -55,18 +55,16 @@ public class AuthService {
         String newRefreshToken = jwtUtil.createJWT(email, role, TokenType.REFRESH);
 
         // 신규 Refresh 토큰 저장
-        refreshTokenRepository.saveRefreshToken(email, newRefreshToken, clientIp, userAgent);
+        refreshTokenRepository.saveRefreshMeta(email, newRefreshToken, clientIp, userAgent);
 
         return new TokenResponse(newAccessToken, newRefreshToken);
     }
 
     @Transactional
-    public TokenResponse generateTokes(String email, String role, String clientIp, String userAgent) {
+    public TokenResponse generateTokes(String email, String role) {
 
         String accessToken = jwtUtil.createJWT(email, role, TokenType.ACCESS);
         String refreshToken = jwtUtil.createJWT(email, role, TokenType.REFRESH);
-
-        refreshTokenRepository.saveRefreshToken(email, refreshToken, clientIp, userAgent);
 
         return new TokenResponse(accessToken, refreshToken);
     }

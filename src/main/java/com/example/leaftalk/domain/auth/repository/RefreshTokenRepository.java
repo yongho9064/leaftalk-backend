@@ -21,7 +21,7 @@ public class RefreshTokenRepository {
 
     private static final String RT_PREFIX = "RT:";
 
-    public void saveRefreshToken(String email, String refreshToken, String ip, String userAgent) {
+    public void saveRefreshMeta(String email, String refreshToken, String ip, String userAgent) {
 
         RefreshMetaRequest meta = RefreshMetaRequest.builder()
                 .refreshToken(refreshToken)

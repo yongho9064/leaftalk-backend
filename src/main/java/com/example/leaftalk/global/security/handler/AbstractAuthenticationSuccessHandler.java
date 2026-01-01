@@ -1,6 +1,7 @@
 package com.example.leaftalk.global.security.handler;
 
 import com.example.leaftalk.domain.auth.dto.response.TokenResponse;
+import com.example.leaftalk.domain.auth.repository.RefreshTokenRepository;
 import com.example.leaftalk.domain.auth.service.AuthService;
 import com.example.leaftalk.global.security.util.CookieUtil;
 import com.example.leaftalk.global.security.util.IpUtil;
@@ -16,10 +17,12 @@ public abstract class AbstractAuthenticationSuccessHandler implements Authentica
 
     protected final int cookieRefreshMaxAgeSec;
     protected final AuthService authService;
+    protected final RefreshTokenRepository refreshTokenRepository;
 
-    protected AbstractAuthenticationSuccessHandler(int cookieRefreshMaxAgeSec, AuthService authService) {
+    protected AbstractAuthenticationSuccessHandler(int cookieRefreshMaxAgeSec, AuthService authService, RefreshTokenRepository refreshTokenRepository) {
         this.cookieRefreshMaxAgeSec = cookieRefreshMaxAgeSec;
         this.authService = authService;
+        this.refreshTokenRepository = refreshTokenRepository;
     }
 
     @Override
@@ -29,7 +32,8 @@ public abstract class AbstractAuthenticationSuccessHandler implements Authentica
         String clientIp = IpUtil.getClientIp(request);
         String userAgent = request.getHeader("User-Agent");
 
-        TokenResponse tokenDto = authService.generateTokes(email, role, clientIp, userAgent);
+        TokenResponse tokenDto = authService.generateTokes(email, role);
+        refreshTokenRepository.saveRefreshMeta(email, tokenDto.refreshToken(), clientIp, userAgent);
 
         Cookie refreshCookie = CookieUtil.createCookie("refreshToken", tokenDto.refreshToken(), cookieRefreshMaxAgeSec);
         response.addCookie(refreshCookie);

@@ -1,6 +1,7 @@
 package com.example.leaftalk.global.security.handler;
 
 import com.example.leaftalk.domain.auth.dto.response.TokenResponse;
+import com.example.leaftalk.domain.auth.repository.RefreshTokenRepository;
 import com.example.leaftalk.domain.auth.service.AuthService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -15,9 +16,10 @@ public class SocialSuccessHandler extends AbstractAuthenticationSuccessHandler {
 
     public SocialSuccessHandler(
             @Value("${spring.cookie.refresh-max-age-sec}") int cookieRefreshMaxAgeSec,
-            AuthService authService) {
+            AuthService authService,
+            RefreshTokenRepository refreshTokenRepository) {
 
-        super(cookieRefreshMaxAgeSec, authService);
+        super(cookieRefreshMaxAgeSec, authService, refreshTokenRepository);
     }
 
     @Override
