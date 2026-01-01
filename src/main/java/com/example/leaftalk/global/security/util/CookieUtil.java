@@ -3,26 +3,19 @@ package com.example.leaftalk.global.security.util;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.experimental.UtilityClass;
 
 import java.util.Arrays;
 import java.util.Optional;
 
+@UtilityClass
 public final class CookieUtil {
 
-    private CookieUtil() {
-        throw new UnsupportedOperationException("유틸 클래스는 인스턴스화할 수 없습니다.");
-    }
-
     public static Optional<Cookie> getCookie(HttpServletRequest request, String name) {
-        Cookie[] cookies = request.getCookies();
-
-        if (cookies == null) {
-            return Optional.empty();
-        }
-
-        return Arrays.stream(cookies)
-                .filter(cookie -> name.equals(cookie.getName()))
-                .findFirst();
+        return Optional.ofNullable(request.getCookies())
+                .flatMap(cookies -> Arrays.stream(cookies)
+                        .filter(cookie -> name.equals(cookie.getName()))
+                        .findFirst());
     }
 
     public static Cookie createCookie(String name, String value, int maxAge) {

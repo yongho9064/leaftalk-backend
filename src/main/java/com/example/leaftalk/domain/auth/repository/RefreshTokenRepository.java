@@ -1,7 +1,8 @@
 package com.example.leaftalk.domain.auth.repository;
 
-import com.example.leaftalk.domain.auth.dto.request.RefreshTokenMeta;
+import com.example.leaftalk.domain.auth.dto.request.RefreshMetaRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 import tools.jackson.databind.ObjectMapper;
@@ -12,24 +13,27 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class RefreshTokenRepository {
 
+    @Value("${spring.jwt.refresh-expiration}")
+    private long refreshExpiration;
+
     private final RedisTemplate<String, Object> redisTemplate;
     private final ObjectMapper objectMapper;
 
     private static final String RT_PREFIX = "RT:";
 
-    public void saveRefreshToken(String email, String refreshToken, String ip, String userAgent, long timeout) {
+    public void saveRefreshToken(String email, String refreshToken, String ip, String userAgent) {
 
-        RefreshTokenMeta meta = RefreshTokenMeta.builder()
+        RefreshMetaRequest meta = RefreshMetaRequest.builder()
                 .refreshToken(refreshToken)
                 .ip(ip)
                 .userAgent(userAgent)
                 .build();
 
         String key = RT_PREFIX + email;
-        redisTemplate.opsForValue().set(key, meta, timeout, TimeUnit.MILLISECONDS);
+        redisTemplate.opsForValue().set(key, meta, refreshExpiration, TimeUnit.MILLISECONDS);
     }
 
-    public RefreshTokenMeta getRefreshTokenMetaByEmail(String email) {
+    public RefreshMetaRequest getRefreshTokenMetaByEmail(String email) {
 
         String key = RT_PREFIX + email;
         Object value = redisTemplate.opsForValue().get(key);
@@ -38,7 +42,7 @@ public class RefreshTokenRepository {
             return null;
         }
 
-        return objectMapper.convertValue(value, RefreshTokenMeta.class);
+        return objectMapper.convertValue(value, RefreshMetaRequest.class);
     }
 
     public boolean deleteRefreshTokenByEmail(String email) {

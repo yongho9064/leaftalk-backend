@@ -1,6 +1,6 @@
 package com.example.leaftalk.domain.member.entity;
 
-import com.example.leaftalk.global.entity.BaseTimeEntity;
+import com.example.leaftalk.global.entity.BaseCreateTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member extends BaseTimeEntity {
+public class Member extends BaseCreateTimeEntity {
 
     @Id @Column(name = "member_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

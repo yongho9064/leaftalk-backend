@@ -3,6 +3,7 @@ package com.example.leaftalk.global.security.handler;
 import com.example.leaftalk.domain.auth.service.AuthService;
 import com.example.leaftalk.global.security.enums.TokenType;
 import com.example.leaftalk.global.security.util.CookieUtil;
+import com.example.leaftalk.global.security.util.IpUtil;
 import com.example.leaftalk.global.security.util.JWTUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,7 +37,10 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         String accessToken = jwtUtil.createJWT(email, role, TokenType.ACCESS);
         String refreshToken = jwtUtil.createJWT(email, role, TokenType.REFRESH);
 
-        authService.addRefresh(request, email, refreshToken);
+        String clientIp = IpUtil.getClientIp(request);
+        String userAgent = request.getHeader("User-Agent");
+
+        authService.addRefresh(email, refreshToken, clientIp, userAgent);
 
         // 쿠키 생성 후 응답에 추가
         Cookie refreshCookie = CookieUtil.createCookie("refreshToken", refreshToken, cookieRefreshMaxAgeSec);
