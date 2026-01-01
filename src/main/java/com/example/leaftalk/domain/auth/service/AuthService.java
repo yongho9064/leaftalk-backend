@@ -61,8 +61,14 @@ public class AuthService {
     }
 
     @Transactional
-    public void addRefresh(String email, String refreshToken, String clientIp, String userAgent) {
+    public TokenResponse generateTokes(String email, String role, String clientIp, String userAgent) {
+
+        String accessToken = jwtUtil.createJWT(email, role, TokenType.ACCESS);
+        String refreshToken = jwtUtil.createJWT(email, role, TokenType.REFRESH);
+
         refreshTokenRepository.saveRefreshToken(email, refreshToken, clientIp, userAgent);
+
+        return new TokenResponse(accessToken, refreshToken);
     }
 
 }
