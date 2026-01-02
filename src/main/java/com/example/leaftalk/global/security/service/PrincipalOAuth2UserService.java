@@ -6,6 +6,7 @@ import com.example.leaftalk.domain.member.entity.SocialProvider;
 import com.example.leaftalk.domain.member.repository.MemberRepository;
 import com.example.leaftalk.global.security.details.MemberDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -14,12 +15,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
 
     private final MemberRepository memberRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     @Transactional
@@ -62,9 +65,12 @@ public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
             return new MemberDetails(member, attributes);
 
         } else {
+            String uuid = UUID.randomUUID().toString();
+            String encodedPassword = bCryptPasswordEncoder.encode(uuid);
+
             Member newMember = Member.builder()
                     .email(email)
-                    .password("")
+                    .password(encodedPassword)
                     .isLock(false)
                     .isSocial(true)
                     .socialProvider(SocialProvider.valueOf(registrationId))

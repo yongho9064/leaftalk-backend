@@ -1,7 +1,7 @@
 package com.example.leaftalk.domain.auth.controller;
 
 import com.example.leaftalk.domain.auth.dto.response.TokenResponse;
-import com.example.leaftalk.domain.auth.dto.response.JWTResponse;
+import com.example.leaftalk.domain.auth.dto.response.AccessTokenResponse;
 import com.example.leaftalk.domain.auth.service.AuthService;
 import com.example.leaftalk.global.exception.CustomException;
 import com.example.leaftalk.global.exception.ErrorCode;
@@ -28,7 +28,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/refresh")
-    public ResponseEntity<JWTResponse> jwtRefresh(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<AccessTokenResponse> jwtRefresh(HttpServletRequest request, HttpServletResponse response) {
 
         String refreshToken = CookieUtil.getCookie(request, "refreshToken")
                 .orElseThrow(() -> new CustomException(ErrorCode.COOKIE_NOT_FOUND)).getValue();
@@ -40,7 +40,7 @@ public class AuthController {
         Cookie newRefreshCookie = CookieUtil.createCookie("refreshToken", tokenResponse.refreshToken(), refreshCookieMaxAge);
         response.addCookie(newRefreshCookie);
 
-        return ResponseEntity.ok(new JWTResponse(tokenResponse.accessToken()));
+        return ResponseEntity.ok(new AccessTokenResponse(tokenResponse.accessToken()));
     }
 
 }

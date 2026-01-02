@@ -2,13 +2,12 @@ package com.example.leaftalk.domain.member.entity;
 
 import com.example.leaftalk.global.entity.BaseCreateTimeEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseCreateTimeEntity {
 
@@ -40,18 +39,6 @@ public class Member extends BaseCreateTimeEntity {
 
     @Enumerated(EnumType.STRING)
     private SocialProvider socialProvider;
-
-    @Builder
-    public Member(String email, String password, String nickname,  Role role, boolean marketingAgree, boolean isLock, boolean isSocial, SocialProvider socialProvider) {
-        this.email = email;
-        this.password = password;
-        this.nickname = nickname;
-        this.marketingAgree = marketingAgree;
-        this.role = role;
-        this.isLock = isLock;
-        this.isSocial = isSocial;
-        this.socialProvider = socialProvider;
-    }
 
     public void updateMember(String nickname) {
         this.nickname = nickname;

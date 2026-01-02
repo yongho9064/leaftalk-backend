@@ -3,11 +3,11 @@ package com.example.leaftalk.domain.member.dto.request;
 import com.example.leaftalk.domain.member.entity.Member;
 import com.example.leaftalk.domain.member.entity.Role;
 import jakarta.validation.constraints.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberSignupRequest {
 
@@ -25,6 +25,7 @@ public class MemberSignupRequest {
     private String password;
 
     @NotBlank(message = "비밀번호 확인은 필수 입력 값입니다.")
+    @Size(min = 8, max = 20, message = "비밀번호 확인은 8자 이상 20자 이하로 입력해주세요.")
     private String passwordConfirm;
 
     @NotBlank(message = "닉네임은 필수 입력 값입니다.")
