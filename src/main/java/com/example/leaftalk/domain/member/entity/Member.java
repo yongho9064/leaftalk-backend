@@ -6,8 +6,6 @@ import lombok.*;
 
 @Entity
 @Getter
-@Builder
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseCreateTimeEntity {
 
@@ -42,6 +40,19 @@ public class Member extends BaseCreateTimeEntity {
 
     public void updateMember(String nickname) {
         this.nickname = nickname;
+    }
+
+    @Builder
+    public Member(String email, String password, String nickname, boolean marketingAgree,
+                  boolean isLock, boolean isSocial, Role role, SocialProvider socialProvider) {
+        this.email = email;
+        this.password = password;
+        this.nickname = nickname;
+        this.marketingAgree = marketingAgree;
+        this.isLock = isLock;
+        this.isSocial = isSocial;
+        this.role = role;
+        this.socialProvider = socialProvider;
     }
 
 }
